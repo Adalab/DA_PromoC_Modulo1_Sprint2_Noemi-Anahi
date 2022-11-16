@@ -1,3 +1,4 @@
+		
 												-- CONSULTAS AVANZADAS 2
 
 /*Enunciado
@@ -51,11 +52,16 @@ de nuevas oficinas.*/
 
 SELECT city
 FROM employees
-WHERE COUNT(employee_id) >= 4
-GROUP BY city ;
-
-
+GROUP BY city 
+HAVING COUNT(employee_id) >= 4;
 
 /*6)Cread una nueva columna basándonos en la cantidad monetaria:
 Necesitamos una consulta que clasifique los pedidos en dos categorías ("Alto" y "Bajo") en función de la cantidad monetaria total 
 que han supuesto: por encima o por debajo de 2000 euros.*/
+
+SELECT CASE 
+	WHEN (unit_price * quantity) < 2000 THEN "Bajo"
+    ELSE "Alto"
+    END AS OrderCategory, order_id, unit_price 
+FROM order_details
+GROUP BY order_id ;
