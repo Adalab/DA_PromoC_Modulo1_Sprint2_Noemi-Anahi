@@ -6,17 +6,43 @@ El día de hoy vamos a realizar ejercicios en los que practicaremos las queries 
 INNER JOIN y NATURAL JOIN. De esta manera podremos combinar los datos de diferentes tablas en las mismas bases de datos, para así realizar
  consultas mucho mas complejas.*/
  
+ USE northwind;
+ 
 /* 1)Pedidos por empresa en UK:
 Desde las oficinas en UK nos han pedido con urgencia que realicemos una consulta a la base de datos 
 con la que podamos conocer cuántos pedidos ha realizado cada empresa cliente de UK. Nos piden el ID del cliente 
 y el nombre de la empresa y el número de pedidos.*/
 
+SELECT  company_name AS NombreEmpresa , COUNT(orders.order_id) AS NumeroPedidos, orders.customer_id 
+FROM customers INNER JOIN orders
+ON customers.customer_id = orders.customer_id 
+WHERE country = 'UK'
+GROUP BY customer_id ;
+
+-- Nos falta el alias de customer_id = Identificador
+   
 
 /*2)Productos pedidos por empresa en UK por año:
 Desde Reino Unido se quedaron muy contentas con nuestra rápida respuesta a su petición anterior y
 han decidido pedirnos una serie de consultas adicionales. La primera de ellas consiste en una query que nos sirva para
  conocer cuántos objetos ha pedido cada empresa cliente de UK durante cada año. Nos piden concretamente conocer el nombre 
  de la empresa, el año, y la cantidad de objetos que han pedido. Para ello hará falta hacer 2 joins.*/
+ 
+ 
+SELECT  company_name AS NombreEmpresa , COUNT(orders.order_id) AS NumObjetos, orders.customer_id, orders.order_date 
+FROM customers INNER JOIN orders
+ON customers.customer_id = orders.customer_id 
+WHERE country = 'UK'
+GROUP BY YEAR (order_date) ;
+
+SELECT customers.company_name, orders.order_date, customer_id
+FROM customers INNER JOIN orders
+WHERE country = 'UK'
+GROUP BY YEAR(order_date);
+USING (customers.company_name, orders.order_date, orders.customer_id);
+
+
+(DAY()), el mes (MONTH()) y el año (YEAR())
 
 
 /*3)Mejorad la query anterior:
