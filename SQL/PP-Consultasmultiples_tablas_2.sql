@@ -46,4 +46,4 @@ FROM employees AS A, employees AS B
 WHERE A.reports_to = B.employee_id
 GROUP BY CONCAT(A.first_name, " ", A.last_name) ;
 
--- El jefe es Andrew Fuller ya que es el que más personas a su cargo tiene según nuestro resultado.
+-- El director es Andrew Fuller, ya que tiene a su cargo a más empleados y entre ellos a Steven Buchanan, que es el otro nombre que se muestra en nuestra tabla.
