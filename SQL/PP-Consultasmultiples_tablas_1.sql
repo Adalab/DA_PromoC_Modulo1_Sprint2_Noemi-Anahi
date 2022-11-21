@@ -13,14 +13,12 @@ Desde las oficinas en UK nos han pedido con urgencia que realicemos una consulta
 con la que podamos conocer cuántos pedidos ha realizado cada empresa cliente de UK. Nos piden el ID del cliente 
 y el nombre de la empresa y el número de pedidos.*/
 
-SELECT  company_name AS NombreEmpresa , COUNT(orders.order_id) AS NumeroPedidos, orders.customer_id 
+SELECT  customers.company_name AS NombreEmpresa , customers.customer_id AS Identificador, COUNT(orders.order_id) AS NumeroPedidos
 FROM customers INNER JOIN orders
 ON customers.customer_id = orders.customer_id 
 WHERE country = 'UK'
-GROUP BY customer_id ;
+GROUP BY customers.customer_id ;
 
--- Nos falta el alias de customer_id = Identificador
-   
 
 /*2)Productos pedidos por empresa en UK por año:
 Desde Reino Unido se quedaron muy contentas con nuestra rápida respuesta a su petición anterior y
