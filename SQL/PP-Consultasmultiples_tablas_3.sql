@@ -33,33 +33,24 @@ FROM suppliers;
 En este caso, nuestro jefe quiere saber cuantos pedidos ha gestionado "Nancy Davolio", una de nuestras empleadas.
 Nos pide todos los detalles tramitados por ella.*/
 
-
-
-
-SELECT CONCAT(first_name,last_name) AS NombreApellido
-FROM employees
-WHERE employee_id =1
-UNION
-SELECT order_id
-FROM orders;
-			
-            
--- ver si hay otra forma de hacerlo con in o in not.
-
+SELECT *
+FROM orders
+WHERE employee_id IN (
+					SELECT employee_id
+                    FROM employees
+                    WHERE first_name = "Nancy");
 
 
 /*3)Extraed todas las empresas que no han comprado en el año 1997
 En este caso, nuestro jefe quiere saber cuántas empresas no han comprado en el año 1997.
 💡 Pista 💡 Para extraer el año de una fecha, podemos usar el estamento year. Más documentación sobre este método.*/
 
-SELECT company_name AS NombreEmpresa
+SELECT company_name AS NombreEmpresa, country
 FROM customers
-WHERE company_name NOT IN(SELECT (YEAR(order_date) = 1997)
-							FROM orders);
-
-
--- Falta ver porque no nos trae nada!
-
+WHERE customer_id NOT IN(
+						SELECT customer_id
+						FROM orders
+						WHERE YEAR (order_date) = 1997);
 
 
 /*4)Extraed toda la información de los pedidos donde tengamos "Konbu"
