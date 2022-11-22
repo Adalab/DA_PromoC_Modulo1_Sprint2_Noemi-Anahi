@@ -27,20 +27,13 @@ han decidido pedirnos una serie de consultas adicionales. La primera de ellas co
  de la empresa, el año, y la cantidad de objetos que han pedido. Para ello hará falta hacer 2 joins.*/
  
  
-SELECT  company_name AS NombreEmpresa , COUNT(orders.order_id) AS NumObjetos, orders.customer_id, orders.order_date 
-FROM customers INNER JOIN orders
-ON customers.customer_id = orders.customer_id 
-WHERE country = 'UK'
-GROUP BY YEAR (order_date) ;
-
-SELECT customers.company_name, orders.order_date, customer_id
-FROM customers INNER JOIN orders
-WHERE country = 'UK'
-GROUP BY YEAR(order_date);
-USING (customers.company_name, orders.order_date, orders.customer_id);
-
-
-(DAY()), el mes (MONTH()) y el año (YEAR())
+SELECT  C.company_name AS NombreEmpresa , SUM(OD.quantity) AS NumObjetos, YEAR(O.order_date) AS 'Año'
+FROM order_details  AS OD INNER JOIN orders AS O
+ON OD.order_id = O.order_id
+INNER JOIN customers AS C
+ON C.customer_id= O.customer_id
+WHERE C.country = 'UK'
+GROUP BY  C.company_name, YEAR(O.order_date);
 
 
 /*3)Mejorad la query anterior:
@@ -48,11 +41,25 @@ Lo siguiente que nos han pedido es la misma consulta anterior pero con la adici�
 esa cantidad de objetos, teniendo en cuenta los descuentos, etc. Ojo que los descuentos en nuestra tabla nos salen en porcentajes,
 15% nos sale como 0.15.*/
 
+SELECT C.company_name AS NombreEmpresa ,YEAR (O.order_date) AS 'Año', SUM(OD.quantity) AS NumObjetos, SUM((OD.unit_price * OD.quantity)*(1-OD.discount)) AS DineroTotal
+FROM order_details  AS OD INNER JOIN orders AS O
+ON OD.order_id = O.order_id
+INNER JOIN customers AS C
+ON C.customer_id= O.customer_id
+WHERE C.country = 'UK'
+GROUP BY YEAR (O.order_date), C.company_name;
+
 
 /*4)BONUS: Pedidos que han realizado cada compañía y su fecha:
 Después de estas solicitudes desde UK y gracias a la utilidad de los resultados que se han obtenido, desde la central nos han pedido una
 consulta que indique el nombre de cada compañia cliente junto con cada pedido que han realizado y su fecha.*/
 
+SELECT O.order_id,C.company_name AS NombreEmpresa ,O.order_date AS Fecha
+FROM order_details  AS OD INNER JOIN orders AS O
+ON OD.order_id = O.order_id
+INNER JOIN customers AS C
+ON C.customer_id= O.customer_id
+GROUP BY O.order_id;
 
 /*5)BONUS: Tipos de producto vendidos:
 Ahora nos piden una lista con cada tipo de producto que se han vendido, sus categorías, nombre de la categoría y el nombre del producto, 
