@@ -1,4 +1,4 @@
-					-- CONSULTAS TABLAS MULTIPLES 4--
+									-- CONSULTAS MULTIPLES TABLAS 4--
                     
 USE northwind;
 
@@ -47,18 +47,17 @@ LIMIT 10;
 /*BONUS:
 5)Qué producto es más popular.
 Extraed cuál es el producto que más ha sido comprado y la cantidad que se compró.*/
-
-SELECT product_name AS ProductNAme
-FROM products
-WHERE product_id ANY (SELECT product_id,MAX(SUM(quantity)) AS '(SumQuantity)'
-						FROM order_details
-						GROUP BY product_id);
+				
+SELECT products.product_name AS ProductName, SUM(order_details.quantity) AS SumQuantity
+FROM products, order_details
+WHERE products.product_id IN (
+								SELECT order_details.product_id
+								FROM order_details
+								GROUP BY products.product_id
+								ORDER BY SUM(order_details.quantity) DESC );
                     
 
-SELECT DISTINCT P.product_name AS ProductNAme, MAX(SUM(OD.quantity)) AS '(SumQuantity)'
-FROM order_details AS OD INNER JOIN products AS P
-ON OD.product_id = P.product_id
-GROUP BY OD.product_id;
+
 
 
 
