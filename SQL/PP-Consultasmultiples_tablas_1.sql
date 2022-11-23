@@ -66,3 +66,12 @@ Ahora nos piden una lista con cada tipo de producto que se han vendido, sus cate
 y el total de dinero por el que se ha vendido cada tipo de producto (teniendo en cuenta los descuentos).
 Pista Necesitaréis usar 3 joins.*/
 
+SELECT categories.category_id AS CategoryID, categories.category_name AS NombreCategoria, products.product_name AS NombreProducto, 
+SUM(ROUND ((order_details.unit_price * order_details.quantity)*(1-order_details.discount), 2)) AS ProductSales
+FROM categories INNER JOIN products
+USING (category_id)
+INNER JOIN order_details
+USING (product_id)
+INNER JOIN orders
+USING (order_id)
+GROUP BY products.product_name ;
