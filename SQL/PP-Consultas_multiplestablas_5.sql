@@ -45,11 +45,12 @@ empiezan por "L".*/
 
 SELECT C.city AS City,C.company_name AS CompanyName,C.contact_name AS ContactName, C.order_id
 FROM customers AS C
-WHERE C.city LIKE 'L%' AND C.order_id = (SELECT COUNT(O.order_id)
-									FROM orders AS O
-									WHERE O.order_id = C.order_id
-                                    GROUP BY O.order_id);
-                                    
+WHERE  C.order_id = (SELECT COUNT(O.order_id)
+					FROM orders AS O
+					WHERE   C.city LIKE 'L%'
+					GROUP BY O.order_id);
+                  
+                                     O.order_id = C.order_id
 SELECT C.city AS City,C.company_name AS CompanyName,C.contact_name AS ContactName,COUNT(O.order_id)
 FROM orders AS O
 WHERE   SELECT C.city AS City,C.company_name AS CompanyName,C.contact_name AS ContactName, C.order_id
@@ -63,6 +64,15 @@ O.order_id = C.order_id
 Nuestro objetivo es extraer los clientes que no tienen el contacto "Sales" en su "contact_title". 
 Extraer el nombre de contacto, su posisión (contact_title) y el nombre de la compañia.*/
 
+SELECT company_name,contact_name,contact_title
+FROM customers
+WHERE contact_title NOT LIKE 'Sales%';
+
+
 
 /*6)Todos los clientes que no tengan una "A" en segunda posición en su nombre.
 Devolved unicamente el nombre de contacto.*/
+
+SELECT contact_name
+FROM customers
+WHERE contact_name NOT LIKE '_a%';
