@@ -17,8 +17,6 @@ WHERE O.employee_id = ( SELECT E.employee_id
                             ORDER BY O.order_date DESC);
                            
 
-
-
 /*2)Extraed el precio unitario máximo (unit_price) de cada producto vendido.
 Supongamos que ahora nuestro jefe quiere un informe de los productos vendidos y su precio unitario. 
 De nuevo lo tendréis que hacer con queries correlacionadas.*/
@@ -43,23 +41,13 @@ WHERE city LIKE 'A%' OR city LIKE 'B%';
 En este caso, nuestro objetivo es devolver los mismos campos que en la query anterior el número de total de pedidos que han hecho todas las ciudades que
 empiezan por "L".*/
 
-SELECT C.city AS City,C.company_name AS CompanyName,C.contact_name AS ContactName, C.order_id
-FROM customers AS C
-WHERE  C.order_id = (SELECT COUNT(O.order_id)
-					FROM orders AS O
-					WHERE   C.city LIKE 'L%'
-					GROUP BY O.order_id);
-                  
-                                     O.order_id = C.order_id
-SELECT C.city AS City,C.company_name AS CompanyName,C.contact_name AS ContactName,COUNT(O.order_id)
-FROM orders AS O
-WHERE   SELECT C.city AS City,C.company_name AS CompanyName,C.contact_name AS ContactName, C.order_id
-FROM customers AS C
-WHERE C.city LIKE 'L%' 
-                    
-                    
+SELECT customers.city AS Ciudad, customers.company_name AS NombreEmpresa, customers.contact_name AS NombreContacto, COUNT(orders.order_id) AS NumeroPedidos
+FROM customers INNER JOIN orders 
+ON customers.customer_id = orders.customer_id 
+WHERE customers.city LIKE 'L%' 
+GROUP BY NombreEmpresa ;
 
-O.order_id = C.order_id
+
 /*5)Todos los clientes cuyo "contact_title" no incluya "Sales".
 Nuestro objetivo es extraer los clientes que no tienen el contacto "Sales" en su "contact_title". 
 Extraer el nombre de contacto, su posisión (contact_title) y el nombre de la compañia.*/
@@ -67,7 +55,6 @@ Extraer el nombre de contacto, su posisión (contact_title) y el nombre de la co
 SELECT company_name,contact_name,contact_title
 FROM customers
 WHERE contact_title NOT LIKE 'Sales%';
-
 
 
 /*6)Todos los clientes que no tengan una "A" en segunda posición en su nombre.
