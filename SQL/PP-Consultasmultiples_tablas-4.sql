@@ -47,7 +47,7 @@ LIMIT 10;
 /*BONUS:
 5)Qué producto es más popular.
 Extraed cuál es el producto que más ha sido comprado y la cantidad que se compró.*/
-				
+			
 SELECT products.product_name AS ProductName, SUM(order_details.quantity) AS SumQuantity
 FROM products, order_details
 WHERE products.product_id IN (

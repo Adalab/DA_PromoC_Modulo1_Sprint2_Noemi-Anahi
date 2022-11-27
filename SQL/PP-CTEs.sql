@@ -52,25 +52,16 @@ GROUP BY C.company_name ;
 /*5-Cuál la cantidad media pedida de todos los productos ProductID.
 Necesitaréis extraer la suma de las cantidades por cada producto y calcular la media.*/
 
-WITH suma
+WITH pedidos
 AS (
-      SELECT SUM(quantity)
-      FROM order_details 
-      )
-SELECT COUNT(quantity)
-FROM order_details
-JOIN suma
-ON P.product_id = M.product_id ;
-
-
-
-SELECT product_id, SUM(quantity) AS suma
-FROM ( WITH pedidos_sum 
-AS (
-      SELECT SUM(quantity) 
+      SELECT quantity,product_id
       FROM order_details
-      )
-SELECT product_name, media
+    )
+SELECT product_name, AVG (S.quantity)
 FROM products AS P
-JOIN pedidos_sum AS S
-ON P.product_id = S.product_id);
+JOIN pedidos AS S
+ON P.product_id = S.product_id
+GROUP BY P.product_id;
+
+
+
